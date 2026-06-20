@@ -65,22 +65,16 @@ describe("release workflow", () => {
       expect(step.run).toContain('echo "minor=$MINOR" >> $GITHUB_OUTPUT');
     });
 
-    it("should create/update the major version tag", () => {
+    it("should create/update the major and minor version tags", () => {
       const step = steps.find(
-        (s: { name?: string }) => s.name === "Create/update major version tag",
+        (s: { name?: string }) =>
+          s.name === "Create/update major and minor version tags",
       );
       expect(step).toBeDefined();
       expect(step.run).toContain(
         // biome-ignore lint/suspicious/noTemplateCurlyInString: GHA expression
         'git tag -f "v${{ steps.version_parts.outputs.major }}"',
       );
-    });
-
-    it("should create/update the minor version tag", () => {
-      const step = steps.find(
-        (s: { name?: string }) => s.name === "Create/update minor version tag",
-      );
-      expect(step).toBeDefined();
       expect(step.run).toContain(
         // biome-ignore lint/suspicious/noTemplateCurlyInString: GHA expression
         'git tag -f "v${{ steps.version_parts.outputs.minor }}"',

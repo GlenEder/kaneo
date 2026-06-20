@@ -87,12 +87,9 @@ jobs:
           echo "major=$MAJOR" >> $GITHUB_OUTPUT
           echo "minor=$MINOR" >> $GITHUB_OUTPUT
 
-      - name: Create/update major version tag
+      - name: Create/update major and minor version tags
         run: |
           git tag -f "v${{ steps.version_parts.outputs.major }}"
-
-      - name: Create/update minor version tag
-        run: |
           git tag -f "v${{ steps.version_parts.outputs.minor }}"
 
       - name: Push changes
