@@ -78,8 +78,27 @@ jobs:
           git commit -m "chore(release): v${{ steps.new_version.outputs.version }}"
           git tag "v${{ steps.new_version.outputs.version }}"
 
+      - name: Extract version parts
+        id: version_parts
+        run: |
+          FULL_VERSION="${{ steps.new_version.outputs.version }}"
+          MAJOR=$(echo "$FULL_VERSION" | cut -d. -f1)
+          MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
+          echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minor=$MINOR" >> $GITHUB_OUTPUT
+
+      - name: Create/update major version tag
+        run: |
+          git tag -f "v${{ steps.version_parts.outputs.major }}"
+
+      - name: Create/update minor version tag
+        run: |
+          git tag -f "v${{ steps.version_parts.outputs.minor }}"
+
       - name: Push changes
-        run: git push origin HEAD:${{ github.ref }} --tags
+        run: |
+          git push origin HEAD:${{ github.ref }}
+          git push origin --tags --force
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2.6.1
