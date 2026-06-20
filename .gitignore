@@ -53,4 +53,4 @@ compose.override.yml
 .idea
 
 # Plan files
-.plans
+.plans/
